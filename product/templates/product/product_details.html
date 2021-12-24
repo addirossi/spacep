@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ product.name }} {% endblock title %}
+
+{% block body %}
+  <h1>{{ product.name }}</h1>
+  <p>{{ product.description }}</p>
+  <p>{{ product.price }}</p>
+  {% if product.images.count %}
+    {% for pic in product.images.all %}
+      {% if pic.image %}
+        <img src="{{ pic.image.url }}" width="300" height="300">
+      {% else %}
+        <img src="https://via.placeholder.com/300">
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <img src="https://via.placeholder.com/300">
+  {% endif %}
+
+  <form method="post" action="{% url 'add-to-cart' product.id %}">
+    {% csrf_token %}
+    {{ cart_form }}
+    <button type="submit">Добавить в корзину</button>
+  </form>
+  <p><a role="button" href="{% url 'update-product' product.id %}">Редактировать</a> или
+    <a role="button" href="{% url 'delete-product' product.id %}">Удалить</a></p>
+{% endblock body %}
